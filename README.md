@@ -18,6 +18,7 @@
 cd ppo-pytorch
 
 # 依存パッケージのインストール
+```
 pip install -r requirements.txt
 ```
 
