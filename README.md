@@ -1,111 +1,126 @@
 # PPO-PyTorch
 
-### UPDATE [April 2021] : 
+連続および離散行動空間の両方に対応したPPO（Proximal Policy Optimization）のPyTorch実装です。可視化ツールと柔軟な設定システムを備えています。
 
-- merged discrete and continuous algorithms
-- added linear decaying for the continuous action space `action_std`; to make training more stable for complex environments
-- added different learning rates for actor and critic
-- episodes, timesteps and rewards are now logged in `.csv` files
-- utils to plot graphs from log files
-- utils to test and make gifs from preTrained networks
-- `PPO_colab.ipynb` combining all the files to train / test / plot graphs / make gifs on google colab in a convenient jupyter-notebook
+### 更新情報 [2024年11月]
+- 連続行動空間と離散行動空間の実装を統合
 
-#### [Open `PPO_colab.ipynb` in Google Colab](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb)
+## 主な機能
 
+- 🚀 連続・離散両方の行動空間に対応
+- 📊 学習済みエージェントの可視化ツール内蔵
+- ⚙️ YAML形式による簡単な実験管理
+- 🔄 フレームスタッキングのサポート
+- 📈 自動ログ記録とモデルチェックポイント
 
-## Introduction
+## インストール方法
 
-This repository provides a Minimal PyTorch implementation of Proximal Policy Optimization (PPO) with clipped objective for OpenAI gym environments. It is primarily intended for beginners in [Reinforcement Learning](https://en.wikipedia.org/wiki/Reinforcement_learning) for understanding the PPO algorithm. It can still be used for complex environments but may require some hyperparameter-tuning or changes in the code. A concise explaination of PPO algorithm can be found [here](https://stackoverflow.com/questions/46422845/what-is-the-way-to-understand-proximal-policy-optimization-algorithm-in-rl) and a thorough explaination of all the details for implementing best performing PPO can be found [here](https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/) (All are not implemented in this repo yet). 
+cd ppo-pytorch
 
-
-To keep the training procedure simple : 
-  - It has a **constant standard deviation** for the output action distribution (**multivariate normal with diagonal covariance matrix**) for the continuous environments, i.e. it is a hyperparameter and NOT a trainable parameter. However, it is **linearly decayed**. (action_std significantly affects performance)
-  - It uses simple **monte-carlo estimate** for calculating advantages and NOT Generalized Advantage Estimate (check out the OpenAI spinning up implementation for that).
-  - It is a **single threaded implementation**, i.e. only one worker collects experience. [One of the older forks](https://github.com/rhklite/Parallel-PPO-PyTorch) of this repository has been modified to have Parallel workers
-
-## Usage
-
-- To train a new network : run `train.py`
-- To test a preTrained network : run `test.py`
-- To plot graphs using log files : run `plot_graph.py`
-- To save images for gif and make gif using a preTrained network : run `make_gif.py`
-- All parameters and hyperparamters to control training / testing / graphs / gifs are in their respective `.py` file
-- `PPO_colab.ipynb` combines all the files in a jupyter-notebook
-- All the **hyperparameters used for training (preTrained) policies are listed** in the [`README.md` in PPO_preTrained directory](https://github.com/nikhilbarhate99/PPO-PyTorch/tree/master/PPO_preTrained)
-
-#### Note :
-  - if the environment runs on CPU, use CPU as device for faster training. Box-2d and Roboschool run on CPU and training them on GPU device will be significantly slower because the data will be moved between CPU and GPU often
-
-## Citing 
-
-Please use this bibtex if you want to cite this repository in your publications :
-
-    @misc{pytorch_minimal_ppo,
-        author = {Barhate, Nikhil},
-        title = {Minimal PyTorch Implementation of Proximal Policy Optimization},
-        year = {2021},
-        publisher = {GitHub},
-        journal = {GitHub repository},
-        howpublished = {\url{https://github.com/nikhilbarhate99/PPO-PyTorch}},
-    }
-
-## Results
-
-| PPO Continuous RoboschoolHalfCheetah-v1  | PPO Continuous RoboschoolHalfCheetah-v1 |
-| :-------------------------:|:-------------------------: |
-| ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_gifs/RoboschoolHalfCheetah-v1/PPO_RoboschoolHalfCheetah-v1_gif_0.gif) |  ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_figs/RoboschoolHalfCheetah-v1/PPO_RoboschoolHalfCheetah-v1_fig_0.png) |
-
-
-| PPO Continuous RoboschoolHopper-v1  | PPO Continuous RoboschoolHopper-v1 |
-| :-------------------------:|:-------------------------: |
-| ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_gifs/RoboschoolHopper-v1/PPO_RoboschoolHopper-v1_gif_0.gif) |  ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_figs/RoboschoolHopper-v1/PPO_RoboschoolHopper-v1_fig_0.png) |
-
-
-| PPO Continuous RoboschoolWalker2d-v1  | PPO Continuous RoboschoolWalker2d-v1 |
-| :-------------------------:|:-------------------------: |
-| ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_gifs/RoboschoolWalker2d-v1/PPO_RoboschoolWalker2d-v1_gif_0.gif) |  ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_figs/RoboschoolWalker2d-v1/PPO_RoboschoolWalker2d-v1_fig_0.png) |
-
-
-| PPO Continuous BipedalWalker-v2  | PPO Continuous BipedalWalker-v2 |
-| :-------------------------:|:-------------------------: |
-| ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_gifs/BipedalWalker-v2/PPO_BipedalWalker-v2_gif_0.gif) |  ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_figs/BipedalWalker-v2/PPO_BipedalWalker-v2_fig_0.png) |
-
-
-| PPO Discrete CartPole-v1  | PPO Discrete CartPole-v1 |
-| :-------------------------:|:-------------------------: |
-| ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_gifs/CartPole-v1/PPO_CartPole-v1_gif_0.gif) |  ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_figs/CartPole-v1/PPO_CartPole-v1_fig_0.png) |
-
-
-| PPO Discrete LunarLander-v2  | PPO Discrete LunarLander-v2 |
-| :-------------------------:|:-------------------------: |
-| ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_gifs/LunarLander-v2/PPO_LunarLander-v2_gif_0.gif) |  ![](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_figs/LunarLander-v2/PPO_LunarLander-v2_fig_0.png) |
-
-
-## Dependencies
-Trained and Tested on:
-```
-Python 3
-PyTorch
-NumPy
-gym
-```
-Training Environments 
-```
-Box-2d
-Roboschool
-pybullet
-```
-Graphs and gifs
-```
-pandas
-matplotlib
-Pillow
+# 依存パッケージのインストール
+pip install -r requirements.txt
 ```
 
+## クイックスタート
+
+1. 既定の設定でエージェントを学習:
+```bash
+python train.py --experiment ppo-car-racing
+```
+
+2. 学習済みエージェントの振る舞いを可視化:
+```bash
+# 最新のモデルを使用
+python visualize.py --experiment ppo-car-racing --format mp4
+
+# 特定のタイムステップのモデルを使用
+python visualize.py --experiment ppo-car-racing --timestep 100000 --format mp4
+```
+
+## 設定方法
+
+実験設定の管理にはYAML形式の設定ファイルを使用します。デフォルトの設定は`config/default_config.yaml`に保存されています。
+
+新しい環境を追加する場合:
+
+1. `config/default_config.yaml`に新しい実験設定を追加:
+```yaml
+experiments:
+  - name: "your-experiment-name"
+    env:
+      name: "YourEnvironmentName-v1"
+      frame_stack: 4  # オプション
+    agent:
+      type: "ppo"
+      hyperparameters:
+        K_epochs: 80
+        eps_clip: 0.2
+        gamma: 0.99
+        lr_actor: 0.0003
+        lr_critic: 0.001
+        update_timestep: 4000
+    # ... その他の設定
+```
+
+2. 実験の実行:
+```bash
+python train.py --experiment your-experiment-name
+```
+
+## プロジェクト構成
+
+```
+ppo-pytorch/
+├── config/
+│   └── default_config.yaml    # デフォルト設定
+├── models/
+│   └── PPO.py                # PPO実装
+├── utils/
+│   ├── trainer.py            # 学習ロジック
+│   └── utils.py              # ユーティリティ関数
+├── train.py                  # 学習スクリプト
+└── visualize.py             # 可視化スクリプト
+```
+
+## 可視化機能
+
+学習済みエージェントの振る舞いを可視化するツールを提供:
+動くか検証してません　動かなかったら遠藤に言ってください。
+
+- GIFアニメーションの生成:
+```bash
+python visualize.py --experiment ppo-car-racing --format gif
+```
+
+- MP4動画の作成:
+```bash
+python visualize.py --experiment ppo-car-racing --format mp4 --episodes 3 --fps 60
+```
+
+## 新しいモデルの追加方法
+
+1. `models`ディレクトリに新しいモデルクラスを作成
+2. `train.py`の`AgentFactory`を更新:
+```python
+if agent_type == "your_model":
+    from models.YourModel import YourModel
+    return YourModel(config)
+```
+
+## ログとチェックポイント
+
+- モデルは`experiments/{experiment_name}/models/`に自動保存
+- ログは`experiments/{experiment_name}/logs/`に保存
+- 可視化結果は`videos/`ディレクトリに保存
+
+## ライセンス
+
+このプロジェクトはMITライセンスの下で公開されています。詳細はLICENSEファイルを参照してください。
 
 ## References
 
 - [PPO paper](https://arxiv.org/abs/1707.06347)
 - [OpenAI Spinning up](https://spinningup.openai.com/en/latest/)
+- [github] (https://github.com/nikhilbarhate99/PPO-PyTorch)
 
 

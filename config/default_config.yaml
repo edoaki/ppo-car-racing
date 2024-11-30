@@ -1,0 +1,27 @@
+# config/default_config.yaml
+experiments:
+  - name: "ppo-car-racing"
+    env:
+      name: "CarRacing-v2"
+      frame_stack: 4
+    agent:
+      type: "ppo"
+      hyperparameters:
+        K_epochs: 80
+        eps_clip: 0.2
+        gamma: 0.99
+        lr_actor: 0.0003
+        lr_critic: 0.001
+        update_timestep: 4000
+    action:
+      std_init: 0.6
+      std_decay_rate: 0.05
+      min_std: 0.1
+      std_decay_freq: 250000
+    training:
+      max_ep_len: 1000
+      max_training_timesteps: 3000000
+      print_freq: 10000
+      log_freq: 2000
+      save_model_freq: 100000
+      random_seed: 0
