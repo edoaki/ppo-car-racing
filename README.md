@@ -1,6 +1,7 @@
 # PPO-PyTorch
 
-連続および離散行動空間の両方に対応したPPOのPyTorch実装です。car-racingで試すことができます。
+シングルエージェントの運転環境 car-racingのためのPPOのPyTorch実装です。
+環境を変えれば他の問題もPPOで学習できます。
 
 ## 主な機能
 
