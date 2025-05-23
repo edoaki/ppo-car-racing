@@ -1,7 +1,6 @@
 # PPO-PyTorch
 
-連続および離散行動空間の両方に対応したPPO（Proximal Policy Optimization）のPyTorch実装です。
-car-racingで試すことができます。
+連続および離散行動空間の両方に対応したPPOのPyTorch実装です。car-racingで試すことができます。
 
 ## 主な機能
 
